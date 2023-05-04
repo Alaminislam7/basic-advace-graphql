@@ -1,13 +1,10 @@
     type Query {
-        aboltabol(name: String!, possition: String): String!
-        me: User!
-        marks(mark: [Float!]!): Float!
         users(query: String): [User!]!
         posts: [Post!]!
         post: Post!
         comments: [Comment!]!
     }
-    type mutation{
+    type Mutation{
         createUser(data: CreateUserInput!): User!
         deleteUser(id: ID!): User!
         updateUser(id: ID!, data: UpdateUserInput!): User!
@@ -18,6 +15,11 @@
         deletecomment(id: ID!): Comment!
         updateComment(id: ID!, data: UpdateCommentInput!): Comment!
     }
+    type Subscription{
+        comment(postId: ID!) : CommentSubscriptionPayload!
+        post: PostSubscriptionPayload!
+    }
+
     input CreateUserInput{
         name: String!,
         email: String!,
@@ -67,4 +69,17 @@
         title: String!
         author: User!
         post: Post!
+    }
+    enum MutationType {
+        CREATED
+        UPDATED
+        DELETED
+    }
+    type PostSubscriptionPayload {
+        mutation: MutationType!
+        data: Post!
+    }
+    type CommentSubscriptionPayload {
+        mutation: MutationType!
+        data: Comment!
     }
